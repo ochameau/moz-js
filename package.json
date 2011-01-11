@@ -1,6 +1,6 @@
 {
     "name": "moz-js", 
-    "license": "GPL 2.0", 
+    "license": "MPL 1.1/GPL 2.0/LGPL 2.1", 
     "author": "Alexandre Poirot", 
     "version": "0.1", 
     "dependencies": [

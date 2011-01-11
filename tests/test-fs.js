@@ -1,0 +1,42 @@
+const path = require("path");
+const fs = require("fs");
+const self = require("self");
+
+function getDataFilePath(file) {
+  return require("url").toFilename(self.data.url(file));
+}
+
+
+
+exports.testReadDir = function (test) {
+  let dir = getDataFilePath("test-fs/readdir");
+  let array = fs.readDirSync(dir);
+  test.assertEqual(array.length, 3);
+  let validArray = ["a","b","c"];
+  for(var i=0; i<array.length; i++) {
+    test.assertEqual(array[i],path.join(dir,validArray[i]));
+    test.assert(path.existsSync(array[i]));
+  }
+}
+
+exports.testReadFile = function (test) {
+  let file = getDataFilePath("test-fs/readFile.txt");
+  test.assertEqual(fs.readFileSync(file,"utf8"),"file\ncontent\ntest\nutfë8");
+  test.waitUntilDone();
+  fs.readFile(file,"utf8", function (err, data) {
+      test.assertEqual(data,"file\ncontent\ntest\nutfë8");
+      test.done();
+    });
+}
+
+exports.testWriteFile = function (test) {
+  let file = getDataFilePath("test-fs/writeFile.txt");
+  fs.writeFileSync(file,"file\ncontent\ntest\nutfë8","utf8");
+  test.assertEqual(fs.readFileSync(file,"utf8"),"file\ncontent\ntest\nutfë8");
+  test.waitUntilDone();
+  fs.writeFile(file,"file\ncontent\ntest\nutfë8\n2","utf8", function (err) {
+      test.assertEqual(fs.readFileSync(file,"utf8"),"file\ncontent\ntest\nutfë8\n2");
+      test.done();
+    });
+  
+}

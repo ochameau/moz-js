@@ -1,0 +1,10 @@
+{
+    "name": "moz-js", 
+    "license": "GPL 2.0", 
+    "author": "Alexandre Poirot", 
+    "version": "0.1", 
+    "dependencies": [
+      "api-utils"
+    ], 
+    "description": "Node.js root modules equivalents for addon-sdk/firefox platform."
+}

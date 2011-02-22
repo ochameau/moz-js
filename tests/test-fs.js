@@ -15,13 +15,13 @@ exports.testReadDir = function (test) {
   let validArray = ["a","b","c"];
     
   for(var i=0; i<validArray.length; i++) {
-    let idx = array.indexOf(path.join(dir, validArray[i]));
+    let idx = array.indexOf(validArray[i]);
     if (idx == -1) {
       test.fail("readDir didn't returned '"+validArray[i]+"'");
       break;
     }
     
-    test.assert(path.existsSync(array[idx]));
+    test.assert(path.existsSync(path.join(dir, array[idx])));
     array.splice(idx, 1);
   }
   

@@ -10,22 +10,13 @@ function getDataFilePath(file) {
 
 exports.testReadDir = function (test) {
   let dir = getDataFilePath("test-fs/readdir");
-  let array = fs.readDirSync(dir);
+  let array = fs.readdirSync(dir);
   test.assertEqual(array.length, 3);
   let validArray = ["a","b","c"];
-  
-  for(var i=0; i<validArray.length; i++) {
-    let idx = array.indexOf(path.join(dir, validArray[i]));
-    if (idx == -1) {
-      test.fail("readDir didn't returned '"+validArray[i]+"'");
-      break;
-    }
-    
-    test.assert(path.existsSync(array[idx]));
-    array.splice(idx, 1);
+  for(var i=0; i<array.length; i++) {
+    test.assertEqual(array[i],path.join(dir,validArray[i]));
+    test.assert(path.existsSync(array[i]));
   }
-  if (array.length > 0)
-    test.fail("readdir returned unexpected files : "+array.join(', '));
 }
 
 exports.testReadFile = function (test) {
@@ -47,5 +38,20 @@ exports.testWriteFile = function (test) {
       test.assertEqual(fs.readFileSync(file,"utf8"),"file\ncontent\ntest\nutfë8\n2");
       test.done();
     });
+}
+
+exports.testMkdir = function (test) {
+  let file = getDataFilePath("test-fs/mkdir");
   
+  // Remove the test dir if it was here before the test
+  // (in case of previous failure)
+  let stat = fs.statSync(file);
+  if(stat && stat.isDirectory)
+    fs.rmdirSync(file);
+  
+  fs.mkdirSync(file);
+  test.assert(fs.statSync(file).isDirectory);
+  
+  fs.rmdirSync(file);
+  test.assert(!fs.statSync(file));
 }

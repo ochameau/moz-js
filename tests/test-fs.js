@@ -13,10 +13,20 @@ exports.testReadDir = function (test) {
   let array = fs.readdirSync(dir);
   test.assertEqual(array.length, 3);
   let validArray = ["a","b","c"];
-  for(var i=0; i<array.length; i++) {
-    test.assertEqual(array[i],path.join(dir,validArray[i]));
-    test.assert(path.existsSync(array[i]));
+    
+  for(var i=0; i<validArray.length; i++) {
+    let idx = array.indexOf(path.join(dir, validArray[i]));
+    if (idx == -1) {
+      test.fail("readDir didn't returned '"+validArray[i]+"'");
+      break;
+    }
+    
+    test.assert(path.existsSync(array[idx]));
+    array.splice(idx, 1);
   }
+  
+  if (array.length > 0)
+    test.fail("readdir returned unexpected files : "+array.join(', '));
 }
 
 exports.testReadFile = function (test) {

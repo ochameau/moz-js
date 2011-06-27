@@ -3,7 +3,7 @@ const path = require("path");
 const self = require("self");
 
 exports.testCWD = function (test) {
-  let selfPath = path.join(require("url").toFilename(self.data.url()), "..");
+  let selfPath = path.join(require("url").toFilename(self.data.url("..")));
   let cwd = process.cwd();
   test.assertEqual(selfPath, cwd);
 }
